@@ -46,6 +46,31 @@ def client(msg, log_buffer=sys.stderr):
         sock.close()
 
 
+def list_services(port_range=(0, 10)):
+    """
+    Function that lists the services provided by a given range of ports.
+
+    Parameters
+    ==========
+    port_range: tuple of lower and upper bounds of port range, in the format
+        (lower_bound, upper_bound)
+    """
+    # validate arguments passed to function
+    if port_range[0] < 0:
+        raise TypeError("Lower bound must be greater than 0.")
+    elif port_range[1] > 65535:
+        raise TypeError("Upper bound must be less than 65535.")
+    elif port_range[0] > port_range[1]:
+        raise TypeError("Lower bound must be less than Upper Bound.")
+
+    # create a list of
+    for i in xrange(port_range[0], port_range[1]):
+        try:
+            print socket.getservbyport(i)
+        except socket.error:
+            print 'No service for port {}.'.format(i)
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         usg = '\nusage: python echo_client.py "this is my message"\n'
